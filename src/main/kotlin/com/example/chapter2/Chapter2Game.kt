@@ -1,12 +1,15 @@
 package com.example.chapter2
 
+import com.example.chapter1.GLVersion
 import com.example.chapter2.renderer.Loader
 import com.example.chapter2.renderer.Renderer
-import com.example.chapter2.shaders.ShaderProgram
 import com.example.chapter2.shaders.StaticShader
 import com.example.spookycopengl.graphic.Window
 import org.lwjgl.Version
 import org.lwjgl.glfw.GLFWErrorCallback
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.*
+
 
 class Chapter2Game {
 
@@ -15,11 +18,15 @@ class Chapter2Game {
 
     private lateinit var window: Window
     private lateinit var renderer: Renderer
+    private lateinit var shader: StaticShader
 
     fun start() {
         println("Hello LWJGL ${Version.getVersion()}!")
 
         init()
+
+        val a = GLVersion()
+
         loop()
         dispose()
     }
@@ -36,9 +43,14 @@ class Chapter2Game {
 //        window.location = Pair(200, 200)
 
         renderer = Renderer(window)
+        shader = StaticShader()
     }
 
+
     private fun loop() {
+
+//        glEnable(GL_BLEND)
+//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         val vertices = arrayListOf(
             -.5f, .5f, 0f,
@@ -51,8 +63,10 @@ class Chapter2Game {
             0,1,3,
             3,1,2
         ).toIntArray()
-
         val model = Loader.loadToVAO(vertices, indices)
+
+        val extensions = GL11.glGetString(GL11.GL_EXTENSIONS)
+        println(extensions)
 
         while (!window.isClosing()) {
             renderer.prepare()
@@ -62,17 +76,28 @@ class Chapter2Game {
             // input
             // update
             // render
-            StaticShader.start()
+//            shader.start()
             renderer.render(model)
-            StaticShader.stop()
-
+//            shader.stop()
 
             window.update()
         }
     }
 
+    private fun drawQuad(sp: Float) {
+
+        GL11.glBegin(GL11.GL_QUADS)
+        run {
+            GL11.glVertex3f(-sp, -sp, 0.0f)
+            GL11.glVertex3f(sp, -sp, 0.0f)
+            GL11.glVertex3f(sp, sp, 0.0f)
+            GL11.glVertex3f(-sp, sp, 0.0f)
+        }
+        GL11.glBegin(GL11.GL_QUADS)
+    }
+
     private fun dispose() {
-        StaticShader.clean()
+        shader.clean()
         Loader.clean()
         window.dispose()
     }

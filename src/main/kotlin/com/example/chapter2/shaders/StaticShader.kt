@@ -1,6 +1,6 @@
 package com.example.chapter2.shaders
 
-object StaticShader: ShaderProgram(
+class StaticShader(): ShaderProgram(
     vertFile = "chapter2.vert",
     fragFile = "chapter2.frag"
 ) {

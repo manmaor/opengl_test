@@ -24,6 +24,9 @@
 package com.example.tutorial;
 
 import java.nio.IntBuffer;
+
+import com.example.chapter2.renderer.Loader;
+import com.example.chapter2.renderer.RawModel;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -32,6 +35,8 @@ import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
@@ -82,6 +87,13 @@ public class Introduction {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
+        glfwDefaultWindowHints();
+
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
         /* Create window */
         window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
         if (window == NULL) {
@@ -110,6 +122,8 @@ public class Introduction {
         IntBuffer width = MemoryUtil.memAllocInt(1);
         IntBuffer height = MemoryUtil.memAllocInt(1);
 
+        RawModel model = Loader.INSTANCE.cube();
+
         /* Loop until window gets closed */
         while (!glfwWindowShouldClose(window)) {
             float ratio;
@@ -127,24 +141,32 @@ public class Introduction {
             glClear(GL_COLOR_BUFFER_BIT);
 
             /* Set ortographic projection */
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(-ratio, ratio, -1f, 1f, 1f, -1f);
-            glMatrixMode(GL_MODELVIEW);
+//            glMatrixMode(GL_PROJECTION);
+//            glLoadIdentity();
+//            glOrtho(-ratio, ratio, -1f, 1f, 1f, -1f);
+//            glMatrixMode(GL_MODELVIEW);
 
             /* Rotate matrix */
-            glLoadIdentity();
-            glRotatef((float) glfwGetTime() * 50f, 0f, 0f, 1f);
+//            glLoadIdentity();
+//            glRotatef((float) glfwGetTime() * 50f, 0f, 0f, 1f);
 
             /* Render triangle */
-            glBegin(GL_TRIANGLES);
-            glColor3f(1f, 0f, 0f);
-            glVertex3f(-0.6f, -0.4f, 0f);
-            glColor3f(0f, 1f, 0f);
-            glVertex3f(0.6f, -0.4f, 0f);
-            glColor3f(0f, 0f, 1f);
-            glVertex3f(0f, 0.6f, 0f);
-            glEnd();
+//            glBegin(GL_TRIANGLES);
+//            glColor3f(1f, 0f, 0f);
+//            glVertex3f(-0.6f, -0.4f, 0f);
+//            glColor3f(0f, 1f, 0f);
+//            glVertex3f(0.6f, -0.4f, 0f);
+//            glColor3f(0f, 0f, 1f);
+//            glVertex3f(0f, 0.6f, 0f);
+//            glEnd();
+
+
+             glBindVertexArray(model.getVaoId());
+            glEnableVertexAttribArray(0);
+//        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.vertexCount)
+            glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+            glDisableVertexAttribArray(0);
+            glBindVertexArray(0);
 
             /* Swap buffers and poll Events */
             glfwSwapBuffers(window);

@@ -32,6 +32,10 @@ abstract class ShaderProgram(
         GL20.glUseProgram(0)
     }
 
+    fun print() {
+        println(GL20.glGetShaderInfoLog(programId))
+    }
+
     fun clean() {
         stop()
         GL20.glDetachShader(programId, vertShaderId)

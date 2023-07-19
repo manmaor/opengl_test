@@ -15,6 +15,22 @@ object Loader {
     private val vaoCache = mutableListOf<VAO>()
     private val vboCache = mutableListOf<VBO>()
 
+    fun cube(): RawModel {
+        val vertices = arrayListOf(
+            -.5f, .5f, 0f,
+            -.5f, -.5f, 0f,
+            .5f, -.5f, 0f,
+            .5f, .5f, 0f
+        ).toFloatArray()
+
+        val indices = arrayListOf(
+            0,1,3,
+            3,1,2
+        ).toIntArray()
+
+        return loadToVAO(vertices, indices)
+    }
+
     fun loadToVAO(positions: FloatArray, indices: IntArray): RawModel {
         val vao = VAO()
         vaoCache.add(vao)
