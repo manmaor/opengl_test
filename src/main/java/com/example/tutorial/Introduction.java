@@ -25,8 +25,6 @@ package com.example.tutorial;
 
 import java.nio.IntBuffer;
 
-import com.example.chapter2.renderer.Loader;
-import com.example.chapter2.renderer.RawModel;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -35,8 +33,6 @@ import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
@@ -122,7 +118,7 @@ public class Introduction {
         IntBuffer width = MemoryUtil.memAllocInt(1);
         IntBuffer height = MemoryUtil.memAllocInt(1);
 
-        RawModel model = Loader.INSTANCE.cube();
+//        RawModel model = Loader.INSTANCE.cube();
 
         /* Loop until window gets closed */
         while (!glfwWindowShouldClose(window)) {
@@ -160,13 +156,13 @@ public class Introduction {
 //            glVertex3f(0f, 0.6f, 0f);
 //            glEnd();
 
-
-             glBindVertexArray(model.getVaoId());
-            glEnableVertexAttribArray(0);
-//        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.vertexCount)
-            glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-            glDisableVertexAttribArray(0);
-            glBindVertexArray(0);
+//
+//             glBindVertexArray(model.getVaoId());
+//            glEnableVertexAttribArray(0);
+////        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.vertexCount)
+//            glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+//            glDisableVertexAttribArray(0);
+//            glBindVertexArray(0);
 
             /* Swap buffers and poll Events */
             glfwSwapBuffers(window);

@@ -1,9 +1,4 @@
-import com.example.chapter1.HelloLWJGL
-import com.example.chapter1.Test
-import com.example.chapter2.Chapter2Game
-import com.example.test1.Boot
-import com.example.tutorial.Introduction
-import com.example.tutorial.core.FixedTimestepGame
+import com.example.thin_matrix.ThinMatrixGame
 
 
 fun main(args: Array<String>) {
@@ -11,13 +6,12 @@ fun main(args: Array<String>) {
 
 //    Introduction.main(args)
 //
-//    val game = Chapter2Game()
-//    game.start()
+    val game = ThinMatrixGame()
+    game.start()
 
 //    Test.main()
 
-    Boot().run()
-//    HelloLWJGL().run()
+//    Boot().run()
 }
 
 //fun getResourceTest(name: String): String? {

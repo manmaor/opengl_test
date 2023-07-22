@@ -1,4 +1,4 @@
-package com.example.chapter2.shaders
+package com.example.thin_matrix.shaders
 
 class StaticShader(): ShaderProgram(
     vertFile = "chapter2.vert",

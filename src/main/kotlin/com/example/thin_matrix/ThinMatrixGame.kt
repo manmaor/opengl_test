@@ -1,17 +1,16 @@
-package com.example.chapter2
+package com.example.thin_matrix
 
-import com.example.chapter1.GLVersion
-import com.example.chapter2.renderer.Loader
-import com.example.chapter2.renderer.Renderer
-import com.example.chapter2.shaders.StaticShader
+import com.example.thin_matrix.renderer.Loader
+import com.example.thin_matrix.renderer.Renderer
+import com.example.thin_matrix.shaders.StaticShader
 import com.example.spookycopengl.graphic.Window
 import org.lwjgl.Version
+import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL11.*
 
 
-class Chapter2Game {
+class ThinMatrixGame {
 
     // VAO - vertex array object [per 3d model] holds 16 vbo
     // VBO - vertex buffer object - per buffer
@@ -25,8 +24,6 @@ class Chapter2Game {
 
         init()
 
-        val a = GLVersion()
-
         loop()
         dispose()
     }
@@ -35,22 +32,19 @@ class Chapter2Game {
 
         GLFWErrorCallback.createPrint(System.err).set()
 
-        if (!org.lwjgl.glfw.GLFW.glfwInit()) {
+        if (!GLFW.glfwInit()) {
             throw IllegalStateException("Unable to initialize GLFW")
         }
 
         window = Window(1280, 720, "Chapter2 - program1")
 //        window.location = Pair(200, 200)
 
-        renderer = Renderer(window)
+        renderer = Renderer()
         shader = StaticShader()
     }
 
 
     private fun loop() {
-
-//        glEnable(GL_BLEND)
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         val vertices = arrayListOf(
             -.5f, .5f, 0f,
@@ -65,6 +59,13 @@ class Chapter2Game {
         ).toIntArray()
         val model = Loader.loadToVAO(vertices, indices)
 
+
+        println("----------------------------")
+        println("OpenGL Version : " + GL11.glGetString(GL11.GL_VERSION))
+        println("OpenGL Max Texture Size : " + GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE))
+        println("OpenGL Vendor : " + GL11.glGetString(GL11.GL_VENDOR))
+        println("OpenGL Renderer : " + GL11.glGetString(GL11.GL_RENDERER))
+        println("OpenGL Extensions supported by your card : ")
         val extensions = GL11.glGetString(GL11.GL_EXTENSIONS)
         println(extensions)
 
@@ -76,9 +77,11 @@ class Chapter2Game {
             // input
             // update
             // render
-//            shader.start()
+            shader.start()
+
             renderer.render(model)
-//            shader.stop()
+
+            shader.stop()
 
             window.update()
         }

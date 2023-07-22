@@ -73,8 +73,11 @@ class Window {
 
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
+
+        // add debug flag
+//        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE)
 
         /* Create window with specified OpenGL context */
         id = glfwCreateWindow(width, height, title, NULL, NULL)
@@ -125,11 +128,6 @@ class Window {
     fun update() {
         glfwSwapBuffers(id)
         glfwPollEvents()
-    }
-
-    fun clear() {
-        // TODO: should be in the renderer
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_DEPTH_BUFFER_BIT)
     }
 
     fun dispose() {

@@ -1,4 +1,4 @@
-package com.example.chapter2.renderer
+package com.example.thin_matrix.renderer
 
 import com.example.spookycopengl.graphic.VAO
 import com.example.spookycopengl.graphic.VBO
@@ -15,28 +15,12 @@ object Loader {
     private val vaoCache = mutableListOf<VAO>()
     private val vboCache = mutableListOf<VBO>()
 
-    fun cube(): RawModel {
-        val vertices = arrayListOf(
-            -.5f, .5f, 0f,
-            -.5f, -.5f, 0f,
-            .5f, -.5f, 0f,
-            .5f, .5f, 0f
-        ).toFloatArray()
-
-        val indices = arrayListOf(
-            0,1,3,
-            3,1,2
-        ).toIntArray()
-
-        return loadToVAO(vertices, indices)
-    }
-
     fun loadToVAO(positions: FloatArray, indices: IntArray): RawModel {
         val vao = VAO()
         vaoCache.add(vao)
         vao.bind()
-        bindIndicesBuffer(indices)
         storeDataInAttributeList(0, positions)
+        bindIndicesBuffer(indices)
         vao.unbind()
         return RawModel(vao.id, indices.size)
     }
@@ -50,8 +34,10 @@ object Loader {
         val vbo = VBO()
         vboCache.add(vbo)
         vbo.bind(GL15.GL_ELEMENT_ARRAY_BUFFER)
-        vbo.uploadElementArrayData(data = storeDataInIntBuffer(indices))
-        vbo.unbind(GL15.GL_ELEMENT_ARRAY_BUFFER)
+        val buffer = storeDataInIntBuffer(indices)
+        vbo.uploadElementArrayData(data = buffer)
+        // Don't unbind the index buffer anywhere!
+        // Each VAO has one special slot for an index buffer, and unbinding the index buffer will remove it from that slot
     }
 
 

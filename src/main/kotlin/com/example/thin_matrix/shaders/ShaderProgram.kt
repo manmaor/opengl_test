@@ -1,9 +1,7 @@
-package com.example.chapter2.shaders
+package com.example.thin_matrix.shaders
 
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
-import java.io.BufferedReader
-import java.io.FileReader
 
 abstract class ShaderProgram(
     vertFile: String,
