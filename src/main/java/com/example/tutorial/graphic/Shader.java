@@ -117,7 +117,7 @@ public class Shader {
     /**
      * Loads a shader from a file.
      *
-     * @param type Type of the shader
+     * @param type Type of the sha`der
      * @param path File path of the shader
      *
      * @return Compiled Shader from specified file
