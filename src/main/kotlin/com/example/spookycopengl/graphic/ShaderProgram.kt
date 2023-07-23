@@ -1,6 +1,6 @@
 package com.example.spookycopengl.graphic
 
-import com.example.tutorial.math.*
+import com.example.spookycopengl.math.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30

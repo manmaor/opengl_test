@@ -3,7 +3,6 @@ package com.example.thin_matrix.shaders
 import com.example.spookycopengl.graphic.Shader
 import com.example.spookycopengl.graphic.ShaderProgram
 import com.example.spookycopengl.graphic.ShaderType
-import org.lwjgl.opengl.GL20
 
 
 abstract class ShaderProgram(
@@ -21,6 +20,7 @@ abstract class ShaderProgram(
         program = ShaderProgram()
         program.attachShader(vertShader)
         program.attachShader(fragShader)
+        bindAttributes()
         program.link()
     }
 

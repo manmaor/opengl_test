@@ -8,6 +8,7 @@ class StaticShader(): ShaderProgram(
 
     override fun bindAttributes() {
         program.bindAttribLocation(0, "position")
+        program.bindAttribLocation(1, "textureCoords")
     }
 
 }

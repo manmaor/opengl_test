@@ -1,4 +1,4 @@
-package com.example.thin_matrix.renderer
+package com.example.thin_matrix.models
 
 import com.example.spookycopengl.graphic.VBO
 

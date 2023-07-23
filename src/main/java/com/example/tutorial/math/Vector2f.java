@@ -35,20 +35,11 @@ public class Vector2f {
     public float x;
     public float y;
 
-    /**
-     * Creates a default 2-tuple vector with all values set to 0.
-     */
     public Vector2f() {
         this.x = 0f;
         this.y = 0f;
     }
 
-    /**
-     * Creates a 2-tuple vector with specified values.
-     *
-     * @param x x value
-     * @param y y value
-     */
     public Vector2f(float x, float y) {
         this.x = x;
         this.y = y;

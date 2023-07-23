@@ -4,6 +4,7 @@ import com.example.thin_matrix.renderer.Loader
 import com.example.thin_matrix.renderer.Renderer
 import com.example.thin_matrix.shaders.StaticShader
 import com.example.spookycopengl.graphic.Window
+import com.example.thin_matrix.models.TexturedModel
 import org.lwjgl.Version
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -47,17 +48,27 @@ class ThinMatrixGame {
     private fun loop() {
 
         val vertices = arrayListOf(
-            -.5f, .5f, 0f,
-            -.5f, -.5f, 0f,
-            .5f, -.5f, 0f,
-            .5f, .5f, 0f
+            -.5f, .5f, 0f, // v0
+            -.5f, -.5f, 0f, // v1
+            .5f, -.5f, 0f, // v2
+            .5f, .5f, 0f   // v3
         ).toFloatArray()
 
         val indices = arrayListOf(
             0,1,3,
             3,1,2
         ).toIntArray()
-        val model = Loader.loadToVAO(vertices, indices)
+
+        val textureCoords = arrayListOf(
+            0f,0f, // v0
+            0f,1f, // v1
+            1f,1f, // v2
+            1f,0f // v3
+        ).toFloatArray()
+
+        val model = Loader.loadToVAO(vertices, textureCoords, indices)
+        val texture = Loader.loadTexture("hello_world.png")
+        val texturedModel = TexturedModel(model, texture)
 
 
         println("----------------------------")
@@ -79,7 +90,7 @@ class ThinMatrixGame {
             // render
             shader.start()
 
-            renderer.render(model)
+            renderer.render(texturedModel)
 
             shader.stop()
 
