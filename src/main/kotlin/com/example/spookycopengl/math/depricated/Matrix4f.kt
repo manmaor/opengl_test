@@ -1,4 +1,4 @@
-package com.example.spookycopengl.math
+package com.example.spookycopengl.math.depricated
 
 import com.example.spookycopengl.math.interfaces.Bufferable
 import java.nio.FloatBuffer
@@ -10,6 +10,7 @@ data class Matrix4f(
     val m20: Float = 0f, val m21: Float = 0f, val m22: Float = 1f, val m23:Float = 0f,
     val m30: Float = 0f, val m31: Float = 0f, val m32: Float = 0f, val m33:Float = 1f
 ): Bufferable {
+
 
     constructor(col1: Vector4f, col2: Vector4f, col3: Vector4f, col4: Vector4f) : this(
         m00 = col1.x, m01 = col1.y, m02 = col1.z, m03 = col1.w,
@@ -82,7 +83,7 @@ data class Matrix4f(
             this.m30 * other.m03 + this.m31 * other.m13 + this.m32 * other.m23 + this.m33 * other.m33
         )
 
-    fun transpose1() = Matrix4f(
+    fun transpose() = Matrix4f(
         this.m00, this.m10, this.m20, this.m03,
         this.m01, this.m11, this.m21, this.m31,
         this.m02, this.m12, this.m22, this.m32,
@@ -90,7 +91,7 @@ data class Matrix4f(
     )
 
     override fun toBuffer(buffer: FloatBuffer) {
-        buffer.put(m00).put(m10).put(m20)
+        buffer.put(m00).put(m10).put(m20).put(m03)
         buffer.put(m01).put(m11).put(m21)
         buffer.put(m02).put(m12).put(m22)
         buffer.flip()

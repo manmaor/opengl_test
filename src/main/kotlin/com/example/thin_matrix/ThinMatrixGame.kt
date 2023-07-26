@@ -4,7 +4,9 @@ import com.example.thin_matrix.renderer.Loader
 import com.example.thin_matrix.renderer.Renderer
 import com.example.thin_matrix.shaders.StaticShader
 import com.example.spookycopengl.graphic.Window
+import com.example.thin_matrix.entities.Entity
 import com.example.thin_matrix.models.TexturedModel
+import org.joml.Vector3f
 import org.lwjgl.Version
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -40,8 +42,9 @@ class ThinMatrixGame {
         window = Window(1280, 720, "Chapter2 - program1")
 //        window.location = Pair(200, 200)
 
-        renderer = Renderer()
+
         shader = StaticShader()
+        renderer = Renderer(window, shader)
     }
 
 
@@ -70,6 +73,13 @@ class ThinMatrixGame {
         val texture = Loader.loadTexture("hello_world.png")
         val texturedModel = TexturedModel(model, texture)
 
+        val entity = Entity(
+            texturedModel,
+            Vector3f(0f,0f,0f),
+            0f,0f,0f,
+            1f
+        )
+
 
         println("----------------------------")
         println("OpenGL Version : " + GL11.glGetString(GL11.GL_VERSION))
@@ -81,6 +91,8 @@ class ThinMatrixGame {
         println(extensions)
 
         while (!window.isClosing()) {
+            entity.increasePosition(0f, 0f, -0.002f)
+            entity.increaseRotation(0f, 1f, 0f)
             renderer.prepare()
 //            window.clear() // Called in the renderer
 
@@ -90,7 +102,7 @@ class ThinMatrixGame {
             // render
             shader.start()
 
-            renderer.render(texturedModel)
+            renderer.render(entity, shader)
 
             shader.stop()
 

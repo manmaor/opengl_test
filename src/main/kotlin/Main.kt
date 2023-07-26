@@ -13,7 +13,3 @@ fun main(args: Array<String>) {
 
 //    Boot().run()
 }
-
-//fun getResourceTest(name: String): String? {
-//    return object {}.javaClass.getResource("chapter2.vert")?.readText()
-//}

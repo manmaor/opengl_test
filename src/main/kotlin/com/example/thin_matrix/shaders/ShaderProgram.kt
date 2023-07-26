@@ -22,6 +22,7 @@ abstract class ShaderProgram(
         program.attachShader(fragShader)
         bindAttributes()
         program.link()
+        getAllUniforms()
     }
 
     fun start() {
@@ -43,5 +44,7 @@ abstract class ShaderProgram(
     }
 
     abstract fun bindAttributes()
+
+    abstract fun getAllUniforms()
 
 }

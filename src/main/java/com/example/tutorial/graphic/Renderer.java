@@ -146,6 +146,8 @@ public class Renderer {
         }
     }
 
+    // region text and texture
+
     /**
      * Calculates total width of a text.
      *
@@ -369,6 +371,8 @@ public class Renderer {
 
         numVertices += 6;
     }
+
+    // endregion
 
     /**
      * Dispose renderer and clean up its used data.

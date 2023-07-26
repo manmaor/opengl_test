@@ -37,6 +37,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.joml:joml:1.9.2")
+
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 
     implementation("org.lwjgl", "lwjgl")
@@ -85,6 +87,8 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-xxhash")
     implementation("org.lwjgl", "lwjgl-yoga")
     implementation("org.lwjgl", "lwjgl-zstd")
+
+
     runtimeOnly("org.lwjgl", "lwjgl", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-assimp", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-bgfx", classifier = lwjglNatives)
@@ -128,7 +132,6 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-xxhash", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-yoga", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-zstd", classifier = lwjglNatives)
-
 
 }
 

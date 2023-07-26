@@ -1,6 +1,7 @@
 package com.example.spookycopengl.graphic
 
-import com.example.spookycopengl.math.*
+import com.example.spookycopengl.math.toBuffer
+import org.joml.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
@@ -53,6 +54,9 @@ class ShaderProgram(
             Int::class -> {
                 GL20.glUniform1i(location, value as Int)
             }
+            Float::class -> {
+                GL20.glUniform1f(location, value as Float)
+            }
             Vector2f::class -> {
                 MemoryStack.stackPush().use {
                     val buffer: FloatBuffer = it.mallocFloat(2)
@@ -74,13 +78,13 @@ class ShaderProgram(
                     GL20.glUniform3fv(location, buffer)
                 }
             }
-            Matrix2f::class -> {
-                MemoryStack.stackPush().use { stack ->
-                    val buffer = stack.mallocFloat(2*2)
-                    (value as Matrix2f).toBuffer(buffer)
-                    GL20.glUniformMatrix2fv(location, false, buffer)
-                }
-            }
+//            Matrix2f::class -> {
+//                MemoryStack.stackPush().use { stack ->
+//                    val buffer = stack.mallocFloat(2*2)
+//                    (value as Matrix2f).toBuffer(buffer)
+//                    GL20.glUniformMatrix2fv(location, false, buffer)
+//                }
+//            }
             Matrix3f::class -> {
                 MemoryStack.stackPush().use { stack ->
                     val buffer = stack.mallocFloat(3*3)

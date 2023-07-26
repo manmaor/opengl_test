@@ -1,8 +1,7 @@
-package com.example.spookycopengl.math
+package com.example.spookycopengl.math.depricated
 
 import com.example.spookycopengl.math.interfaces.Bufferable
 import java.nio.FloatBuffer
-import kotlin.math.sqrt
 
 
 data class Matrix3f(

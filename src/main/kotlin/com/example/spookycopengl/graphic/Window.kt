@@ -33,6 +33,20 @@ class Window {
             glfwSetWindowPos(id, value.first, value.second)
         }
 
+    private var _height = 0
+    private var _width = 0
+//    var width: Int
+//        private set(value) {
+//            glfwSetWindowSize(id, value, 0)
+//        }
+//        get() = _width
+
+    var size: Pair<Int, Int>
+        set(value) {
+            glfwSetWindowSize(id, value.first, value.second)
+        }
+        get() = Pair(_width, _height)
+
     constructor(width: Int, height: Int, title: String, vSync: Boolean = true) {
 
 
@@ -110,6 +124,14 @@ class Window {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true) // Will be detected in the rendering loop
             }
+        }
+
+        _width = width
+        _height = height
+        glfwSetFramebufferSizeCallback(id) { _, width, height ->
+            println("set width: $width, height: $height")
+            _width = width
+            _height = height
         }
 
         glfwMakeContextCurrent(id)

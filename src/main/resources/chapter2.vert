@@ -5,10 +5,13 @@ in vec2 textureCoords;
 
 out vec2 pass_textureCoords;
 
+uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
+
 //out vec3 colour;
 
 void main(void) {
-    gl_Position = vec4(position.xyz, 1.0);
+    gl_Position = projectionMatrix * transformationMatrix * vec4(position.xyz, 1.0);
 //    colour = vec3(position.x+0.5, 1.0, position.y+0.5);
     pass_textureCoords = textureCoords;
 }

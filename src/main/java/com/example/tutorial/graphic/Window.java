@@ -128,6 +128,7 @@ public class Window {
                 }
             }
         };
+
         glfwSetKeyCallback(id, keyCallback);
     }
 
