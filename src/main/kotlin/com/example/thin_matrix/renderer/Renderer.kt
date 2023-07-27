@@ -2,17 +2,13 @@ package com.example.thin_matrix.renderer
 
 import com.example.spookycopengl.graphic.Window
 import com.example.thin_matrix.entities.Entity
-import com.example.thin_matrix.models.RawModel
-import com.example.thin_matrix.models.TexturedModel
 import com.example.thin_matrix.shaders.StaticShader
 import com.example.thin_matrix.toolbox.Maths
-import org.joml.Math
 import org.joml.Matrix4f
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
-import kotlin.math.tan
 
 
 class Renderer(val window: Window, shader: StaticShader) {
@@ -33,7 +29,7 @@ class Renderer(val window: Window, shader: StaticShader) {
     fun render(entity: Entity, shader: StaticShader) {
 
 
-        GL30.glBindVertexArray(entity.model.model.vaoId)
+        GL30.glBindVertexArray(entity.model.mesh.vao.id)
         GL20.glEnableVertexAttribArray(0)
         GL20.glEnableVertexAttribArray(1)
 
@@ -43,7 +39,7 @@ class Renderer(val window: Window, shader: StaticShader) {
         val mat = Maths.createTransformationMatrix(entity.position, entity.rotX, entity.rotY, entity.rotZ, entity.scale)
         shader.loadTransformationMatrix(mat)
 
-        GL11.glDrawElements(GL11.GL_TRIANGLES, entity.model.model.vertexCount, GL11.GL_UNSIGNED_INT, 0)
+        GL11.glDrawElements(GL11.GL_TRIANGLES, entity.model.mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0)
 
 
         GL20.glDisableVertexAttribArray(1)

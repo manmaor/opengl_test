@@ -1,5 +1,6 @@
 package com.example.thin_matrix
 
+import com.example.spookycopengl.graphic.Mesh
 import com.example.thin_matrix.renderer.Loader
 import com.example.thin_matrix.renderer.Renderer
 import com.example.thin_matrix.shaders.StaticShader
@@ -69,9 +70,9 @@ class ThinMatrixGame {
             1f,0f // v3
         ).toFloatArray()
 
-        val model = Loader.loadToVAO(vertices, textureCoords, indices)
+        val mesh = Mesh.load(vertices, textureCoords, indices)
         val texture = Loader.loadTexture("hello_world.png")
-        val texturedModel = TexturedModel(model, texture)
+        val texturedModel = TexturedModel(mesh, texture)
 
         val entity = Entity(
             texturedModel,
@@ -91,7 +92,7 @@ class ThinMatrixGame {
         println(extensions)
 
         while (!window.isClosing()) {
-            entity.increasePosition(0f, 0f, -0.002f)
+            entity.increasePosition(0f, 0f, -0.02f)
             entity.increaseRotation(0f, 1f, 0f)
             renderer.prepare()
 //            window.clear() // Called in the renderer
@@ -125,6 +126,7 @@ class ThinMatrixGame {
     private fun dispose() {
         shader.clean()
         Loader.clean()
+        // TODO: mesh delete
         window.dispose()
     }
 }
