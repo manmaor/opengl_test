@@ -1,56 +1,16 @@
 package com.example.thin_matrix
 
-import com.example.spookycopengl.graphic.Mesh
-import com.example.thin_matrix.renderer.Loader
-import com.example.thin_matrix.renderer.Renderer
-import com.example.thin_matrix.shaders.StaticShader
-import com.example.spookycopengl.graphic.Window
-import com.example.thin_matrix.entities.Entity
-import com.example.thin_matrix.models.TexturedModel
-import org.joml.Vector3f
-import org.lwjgl.Version
-import org.lwjgl.glfw.GLFW
-import org.lwjgl.glfw.GLFWErrorCallback
-import org.lwjgl.opengl.GL11
+import com.example.my_engine.Engine
+import com.example.my_engine.graphic.*
+import com.example.my_engine.scene.Entity
+import com.example.my_engine.scene.EntityId
 
+class ThinMatrixGame: Engine() {
 
-class ThinMatrixGame {
+    private val meshes = mutableListOf<Mesh>()
+    private val textures = mutableListOf<Texture>()
 
-    // VAO - vertex array object [per 3d model] holds 16 vbo
-    // VBO - vertex buffer object - per buffer
-
-    private lateinit var window: Window
-    private lateinit var renderer: Renderer
-    private lateinit var shader: StaticShader
-
-    fun start() {
-        println("Hello LWJGL ${Version.getVersion()}!")
-
-        init()
-
-        loop()
-        dispose()
-    }
-
-    private fun init() {
-
-        GLFWErrorCallback.createPrint(System.err).set()
-
-        if (!GLFW.glfwInit()) {
-            throw IllegalStateException("Unable to initialize GLFW")
-        }
-
-        window = Window(1280, 720, "Chapter2 - program1")
-//        window.location = Pair(200, 200)
-
-
-        shader = StaticShader()
-        renderer = Renderer(window, shader)
-    }
-
-
-    private fun loop() {
-
+    init {
         val vertices = arrayListOf(
             -.5f, .5f, 0f, // v0
             -.5f, -.5f, 0f, // v1
@@ -71,62 +31,28 @@ class ThinMatrixGame {
         ).toFloatArray()
 
         val mesh = Mesh.load(vertices, textureCoords, indices)
-        val texture = Loader.loadTexture("hello_world.png")
-        val texturedModel = TexturedModel(mesh, texture)
+        meshes.add(mesh)
+        val texture = Texture.loadTexture("hello_world.png")
+        textures.add(texture)
+        val material = Material(texture, listOf(mesh))
+        val model = Model(ModelId("cube-model"), listOf(material))
+        val entity = Entity(id = EntityId("cube_entity"), model = model)
 
-        val entity = Entity(
-            texturedModel,
-            Vector3f(0f,0f,0f),
-            0f,0f,0f,
-            1f
-        )
-
-
-        println("----------------------------")
-        println("OpenGL Version : " + GL11.glGetString(GL11.GL_VERSION))
-        println("OpenGL Max Texture Size : " + GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE))
-        println("OpenGL Vendor : " + GL11.glGetString(GL11.GL_VENDOR))
-        println("OpenGL Renderer : " + GL11.glGetString(GL11.GL_RENDERER))
-        println("OpenGL Extensions supported by your card : ")
-        val extensions = GL11.glGetString(GL11.GL_EXTENSIONS)
-        println(extensions)
-
-        while (!window.isClosing()) {
-            entity.increasePosition(0f, 0f, -0.02f)
-            entity.increaseRotation(0f, 1f, 0f)
-            renderer.prepare()
-//            window.clear() // Called in the renderer
-
-//            val delta = glfwGetTimerValue()
-            // input
-            // update
-            // render
-            shader.start()
-
-            renderer.render(entity, shader)
-
-            shader.stop()
-
-            window.update()
-        }
+        scene.addEntity(entity)
     }
 
-    private fun drawQuad(sp: Float) {
-
-        GL11.glBegin(GL11.GL_QUADS)
-        run {
-            GL11.glVertex3f(-sp, -sp, 0.0f)
-            GL11.glVertex3f(sp, -sp, 0.0f)
-            GL11.glVertex3f(sp, sp, 0.0f)
-            GL11.glVertex3f(-sp, sp, 0.0f)
-        }
-        GL11.glBegin(GL11.GL_QUADS)
+    override fun input(delta: Long) {
     }
 
-    private fun dispose() {
-        shader.clean()
-        Loader.clean()
-        // TODO: mesh delete
-        window.dispose()
+    override fun update(delta: Long) {
+        val entity = scene.modelEntitiesMap.values.first().first()
+        entity.increasePosition(0f, 0f, -0.02f)
+        entity.increaseRotation(0f, 1f, 0f)
     }
+
+    override fun delete() {
+        meshes.forEach { it.delete() }
+        textures.forEach { it.delete() }
+    }
+
 }
