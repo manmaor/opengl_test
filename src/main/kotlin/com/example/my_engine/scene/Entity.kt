@@ -11,7 +11,7 @@ value class EntityId(val value: String)
 class Entity(
     val id: EntityId,
     val model: Model,
-    val position: Vector3f = Vector3f(),
+    var position: Vector3f = Vector3f(),
     val rotation: Quaternionf = Quaternionf(),
     val scale: Float = 1f
 ) {

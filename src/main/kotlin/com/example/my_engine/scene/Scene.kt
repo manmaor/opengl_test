@@ -1,7 +1,6 @@
 package com.example.my_engine.scene
 
 import com.example.my_engine.graphic.Model
-import com.example.my_engine.graphic.TextureManager
 import com.example.my_engine.graphic.Window
 
 class Scene(
@@ -10,6 +9,8 @@ class Scene(
 
     val modelEntitiesMap = mutableMapOf<Model, MutableList<Entity>>()
     val projection: Projection = Projection(window)
+    val camera = Camera()
+
 //    val textureManager = TextureManager()
 
     fun addEntity(entity: Entity) {

@@ -1,4 +1,4 @@
-package com.example.my_engine
+package com.example.my_engine.core
 
 import com.example.my_engine.graphic.Window
 import com.example.my_engine.graphic.render.Render
@@ -15,6 +15,7 @@ abstract class Engine {
     val window: Window
     val render: Render
     val scene: Scene
+    val mouse: Mouse
 
     init {
         GLFWErrorCallback.createPrint(System.err).set()
@@ -23,9 +24,12 @@ abstract class Engine {
             throw IllegalStateException("Unable to initialize GLFW")
         }
 
-        window = Window(1280, 720, "Rename me")
+        window = Window(1280, 720, "Rename me") {
+            resize()
+        }
         render = Render(window)
         scene = Scene(window)
+        mouse = Mouse(window)
 
         println("----------------------------")
         println("OpenGL Version : " + GL11.glGetString(GL11.GL_VERSION))
@@ -38,7 +42,9 @@ abstract class Engine {
 
     }
 
-    // TODO: resize
+    private fun resize() {
+        scene.resize()
+    }
 
     private fun run() {
         running = true
@@ -57,6 +63,7 @@ abstract class Engine {
 
             deltaUpdate += deltaTime / timeU
 
+            mouse.input()
             input(deltaTime)
 
 //            if (deltaUpdate >= 1) {

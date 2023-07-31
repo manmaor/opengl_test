@@ -31,11 +31,6 @@ class Window {
 
     private var _height = 0
     private var _width = 0
-//    var width: Int
-//        private set(value) {
-//            glfwSetWindowSize(id, value, 0)
-//        }
-//        get() = _width
 
     var size: Pair<Int, Int>
         set(value) {
@@ -43,10 +38,20 @@ class Window {
         }
         get() = Pair(_width, _height)
 
-    constructor(width: Int, height: Int, title: String, vSync: Boolean = true) {
+
+    var onCursorMoved: ((x: Double, y: Double) -> Unit)? = null
+    var onCursorEnteredWindow: ((entered: Boolean) -> Unit)? = null
+    var onMouseButtonPressed: ((button: Int,action: Int, mode: Int) -> Unit)? = null
+    private var onWindowResized: (() -> Unit)? = null
 
 
-
+    constructor(
+        width: Int,
+        height: Int,
+        title: String,
+        vSync: Boolean = true,
+        onResize: (() -> Unit)? = null
+    ) {
 
         /* Creating a temporary window for getting the available OpenGL version */
 //        glfwDefaultWindowHints()
@@ -124,11 +129,10 @@ class Window {
 
         _width = width
         _height = height
-        glfwSetFramebufferSizeCallback(id) { _, width, height ->
-            println("set width: $width, height: $height")
-            _width = width
-            _height = height
-        }
+
+        onWindowResized = onResize
+
+        setCallbacks()
 
         glfwMakeContextCurrent(id)
 
@@ -138,10 +142,31 @@ class Window {
         glfwShowWindow(id)
         GL.createCapabilities()
         GL11.glClearColor(1.0f, 0.0f, 0.0f, 1.0f)
-//        GL11.glViewport(0,0, width, height)
+        GL11.glViewport(0,0, width, height)
+    }
+
+    fun setCallbacks() {
+        glfwSetCursorPosCallback(id) { _, x, y ->
+            onCursorMoved?.invoke(x, y)
+        }
+        glfwSetCursorEnterCallback(id) { _, entered ->
+            onCursorEnteredWindow?.invoke(entered)
+        }
+        glfwSetMouseButtonCallback(id) {_, button, action, mode ->
+            onMouseButtonPressed?.invoke(button, action, mode)
+        }
+
+        glfwSetFramebufferSizeCallback(id) { _, width, height ->
+            _width = width
+            _height = height
+
+            onWindowResized?.invoke()
+        }
     }
 
     fun isClosing() = glfwWindowShouldClose(id)
+    fun isKeyPressed(keyCode: Int) = glfwGetKey(id, keyCode) == GLFW_PRESS
+//    fun getMouseInput() = glfwmouse
 
     fun update() {
         glfwSwapBuffers(id)
@@ -150,6 +175,7 @@ class Window {
 
     fun clear() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_DEPTH_BUFFER_BIT)
+        GL11.glViewport(0,0, _width, _height)
     }
 
     fun dispose() {

@@ -9,14 +9,16 @@ class SceneRenderer {
 
     private val program: ShaderProgram = ShaderProgram()
 
-    private val uniformModelMatrix: Uniform
     private val uniformProjectionMatrix: Uniform
+    private val uniformViewMatrix: Uniform
+    private val uniformModelMatrix: Uniform
 
     init {
         setUpShaderProgram()
 
-        uniformModelMatrix = program.uniformLocationOf("modelMatrix")
         uniformProjectionMatrix = program.uniformLocationOf("projectionMatrix")
+        uniformViewMatrix = program.uniformLocationOf("viewMatrix")
+        uniformModelMatrix = program.uniformLocationOf("modelMatrix")
     }
 
     private fun setUpShaderProgram() {
@@ -42,6 +44,7 @@ class SceneRenderer {
         program.bind()
 
         program.setUniformData(uniformProjectionMatrix, scene.projection.projectionMatrix)
+        program.setUniformData(uniformViewMatrix, scene.camera.viewMatrix)
 
         scene.modelEntitiesMap.forEach { (model, entities) ->
             model.materials.forEach { material ->
