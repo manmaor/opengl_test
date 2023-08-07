@@ -88,13 +88,17 @@ class ThinMatrixGame: Engine() {
             1f,0f
         ).toFloatArray()
 
-        val mesh = Mesh.load(vertices, textureCoords, indices)
-        meshes.add(mesh)
-        val texture = Texture.loadTexture("hello_world.png")
-        textures.add(texture)
-        val material = Material(texture, listOf(mesh))
-        val model = Model(ModelId("cube-model"), listOf(material))
-        val entity = Entity(id = EntityId("cube_entity"), model = model, position = Vector3f(0f,0f, -2f))
+//        val mesh = Mesh.load(vertices, textureCoords, indices)
+//        meshes.add(mesh)
+//        val texture = Texture.loadTexture("hello_world.png")
+//        textures.add(texture)
+//        val material = Material(texture, listOf(mesh))
+//        val model = Model(ModelId("cube-model"), listOf(material))
+//        val entity = Entity(id = EntityId("cube_entity"), model = model, position = Vector3f(0f,0f, -2f))
+
+
+        val model = Model.loadModel(ModelId("barrel"), "barrel/Barrel.obj", "barrel/Barrel.png")
+        val entity = Entity(id = EntityId("barrel"), model = model, position = Vector3f(0f,0f, -2f))
 
         scene.addEntity(entity)
     }
