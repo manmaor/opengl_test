@@ -10,16 +10,32 @@ group = "org.example"
 version = "1.0-SNAPSHOT"
 
 val lwjglVersion = "3.3.2"
+val imGuiVersion = "1.86.10"
 
 val lwjglNatives = Pair(
     System.getProperty("os.name")!!,
     System.getProperty("os.arch")!!
 ).let { (name, arch) ->
     when {
-        arrayOf("Mac OS X", "Darwin").any { name.startsWith(it) }                ->
+        arrayOf("Mac OS X", "Darwin", "osx").any { name.startsWith(it) }                ->
             "natives-macos${if (arch.startsWith("aarch64")) "-arm64" else ""}"
         arrayOf("Windows").any { name.startsWith(it) }                           ->
             "natives-windows"
+        else -> throw Error("Unrecognized or unsupported platform. Please set \"lwjglNatives\" manually")
+    }
+}
+
+val imGuiNatives = Pair(
+    System.getProperty("os.name")!!,
+    System.getProperty("os.arch")!!
+).let { (name, arch) ->
+    when {
+        arrayOf("Mac OS X", "Darwin", "osx").any { name.startsWith(it) } ->
+            "natives-macos"
+        arrayOf("Windows").any { name.startsWith(it) } ->
+            "natives-windows"
+        arrayOf("linux").any { name.startsWith(it) } ->
+            "natives-linux"
         else -> throw Error("Unrecognized or unsupported platform. Please set \"lwjglNatives\" manually")
     }
 }
@@ -132,6 +148,9 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-xxhash", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-yoga", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-zstd", classifier = lwjglNatives)
+
+    implementation("io.github.spair:imgui-java-binding:$imGuiVersion")
+    implementation("io.github.spair:imgui-java-$imGuiNatives:$imGuiVersion")
 
 }
 

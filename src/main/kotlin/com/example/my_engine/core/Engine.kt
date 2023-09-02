@@ -44,6 +44,7 @@ abstract class Engine {
 
     private fun resize() {
         scene.resize()
+        render.resize()
     }
 
     private fun run() {
@@ -64,7 +65,10 @@ abstract class Engine {
             deltaUpdate += deltaTime / timeU
 
             mouse.input()
-            input(deltaTime)
+            val inputConsumed = scene.imGuiInstance?.handleGuiInput(scene, window) ?: false
+            if (!inputConsumed) {
+                input(deltaTime)
+            }
 
 //            if (deltaUpdate >= 1) {
 //                val updateDeltaTime = now - initialUpdateTime

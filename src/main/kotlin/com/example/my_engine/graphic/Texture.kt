@@ -37,7 +37,7 @@ class Texture(
     }
 
     companion object {
-        private fun createTexture(width: Int, height: Int, data: ByteBuffer, path: TexturePath) = Texture(path = path, width = width, height = height).apply {
+        fun createTexture(width: Int, height: Int, data: ByteBuffer, path: TexturePath) = Texture(path = path, width = width, height = height).apply {
             bind()
 
             // glPixelStorei(GL_UNPACK_ALIGNMENT, 1); ?

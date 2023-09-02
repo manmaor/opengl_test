@@ -39,10 +39,13 @@ class Window {
         get() = Pair(_width, _height)
 
 
+    // listeners
     var onCursorMoved: ((x: Double, y: Double) -> Unit)? = null
     var onCursorEnteredWindow: ((entered: Boolean) -> Unit)? = null
-    var onMouseButtonPressed: ((button: Int,action: Int, mode: Int) -> Unit)? = null
+    var onMouseButtonPressed: ((button: Int, action: Int, mode: Int) -> Unit)? = null
     private var onWindowResized: (() -> Unit)? = null
+
+    val keyListeners = mutableMapOf<Any, (key: Int, scancode: Int, action: Int, mods: Int) -> Unit>()
 
 
     constructor(
@@ -125,6 +128,8 @@ class Window {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true) // Will be detected in the rendering loop
             }
+
+            keyListeners.values.forEach { it(key, scancode, action, mods) }
         }
 
         _width = width

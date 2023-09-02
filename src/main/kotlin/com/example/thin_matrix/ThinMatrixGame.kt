@@ -3,12 +3,16 @@ package com.example.thin_matrix
 import com.example.my_engine.core.Engine
 import com.example.my_engine.core.Mouse
 import com.example.my_engine.graphic.*
+import com.example.my_engine.graphic.imgui.IImGuiInstance
 import com.example.my_engine.scene.Entity
 import com.example.my_engine.scene.EntityId
+import com.example.my_engine.scene.Scene
+import imgui.ImGui
+import imgui.flag.ImGuiCond
 import org.joml.Vector3f
 import org.lwjgl.glfw.GLFW.*
 
-class ThinMatrixGame: Engine() {
+class ThinMatrixGame: Engine(), IImGuiInstance {
 
     private val meshes = mutableListOf<Mesh>()
     private val textures = mutableListOf<Texture>()
@@ -45,7 +49,6 @@ class ThinMatrixGame: Engine() {
             0.5f,-0.5f,-0.5f,
             0.5f,-0.5f,0.5f
         ).toFloatArray()
-
         val indices = arrayListOf(
             0,1,3,
             3,1,2,
@@ -60,7 +63,6 @@ class ThinMatrixGame: Engine() {
             20,21,23,
             23,21,22
         ).toIntArray()
-
         val textureCoords = arrayListOf(
             0f,0f,
             0f,1f,
@@ -147,14 +149,31 @@ class ThinMatrixGame: Engine() {
 //        val mouseInput = window.getMouseInput()
     }
 
+    override fun drawGui() {
+        ImGui.newFrame()
+        ImGui.setNextWindowPos(0f, 0f, ImGuiCond.Always)
+        ImGui.showDemoWindow()
+        ImGui.endFrame()
+
+        ImGui.render()
+    }
+
+    override fun handleGuiInput(scene: Scene, window: Window): Boolean {
+        val io = ImGui.getIO()
+        val mousePos = mouse.currentPosition
+        io.setMousePos(mousePos.x, mousePos.y)
+        io.setMouseDown(0, mouse.isLeftButtonPressed)
+        io.setMouseDown(1, mouse.isRightButtonPressed)
+
+        return io.wantCaptureMouse || io.wantCaptureKeyboard
+    }
+
     override fun update(delta: Long) {
         val entity = scene.modelEntitiesMap.values.first().first()
 //        entity.increasePosition(0f, 0f, -0.02f)
         val z = entity.position.z
 //        entity.position = Vector3f(mouse.currentPosition.x, -mouse.currentPosition.y, z)
         entity.increaseRotation(0f, 1f, 0f)
-
-
     }
 
     override fun delete() {

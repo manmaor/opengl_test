@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11
 class Render(val window: Window) {
 
     private val sceneRenderer = SceneRenderer()
+    private val guiRenderer = ImGuiRenderer(window)
 
     fun render(scene: Scene) {
 
@@ -18,9 +19,15 @@ class Render(val window: Window) {
 
         // glViewport(0, 0, window.getWidth(), window.getHeight());
         sceneRenderer.render(scene)
+        guiRenderer.render(scene)
     }
 
     fun delete() {
         sceneRenderer.delete()
+        guiRenderer.delete()
+    }
+
+    fun resize() {
+        guiRenderer.resize()
     }
 }

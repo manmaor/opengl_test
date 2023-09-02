@@ -2,6 +2,7 @@ package com.example.my_engine.graphic
 
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
+import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
@@ -34,6 +35,13 @@ class VBO(
         GL30.glBufferData(target, data, usage)
     }
 
+    fun uploadData(
+        target: Int = GL15.GL_ARRAY_BUFFER,
+        data: ByteBuffer,
+        usage: Int = GL15.GL_STATIC_DRAW) {
+        GL30.glBufferData(target, data, usage)
+    }
+
     /**
      * Upload null data to this VBO with specified target, size and usage.
      *
@@ -62,6 +70,14 @@ class VBO(
         usage: Int = GL15.GL_STATIC_DRAW) {
         GL30.glBufferData(target, data, usage)
     }
+
+    fun uploadElementArrayData(
+        target: Int = GL15.GL_ELEMENT_ARRAY_BUFFER,
+        data: ByteBuffer,
+        usage: Int = GL15.GL_STATIC_DRAW) {
+        GL30.glBufferData(target, data, usage)
+    }
+
 
 
 }
