@@ -5,6 +5,9 @@ import com.example.my_engine.core.Mouse
 import com.example.my_engine.graphic.*
 import com.example.my_engine.scene.Entity
 import com.example.my_engine.scene.EntityId
+import com.example.my_engine.scene.lights.AmbientLight
+import com.example.my_engine.scene.lights.DirLight
+import com.example.my_engine.scene.lights.SceneLights
 import org.joml.Vector3f
 import org.lwjgl.glfw.GLFW.*
 
@@ -97,10 +100,26 @@ class ThinMatrixGame: Engine() {
 //        val entity = Entity(id = EntityId("cube_entity"), model = model, position = Vector3f(0f,0f, -2f))
 
 
-        val model = Model.loadModel(ModelId("barrel"), "barrel/Barrel.obj", "barrel/Barrel.png")
-        val entity = Entity(id = EntityId("barrel"), model = model, position = Vector3f(0f,0f, -2f))
+//        val model = Model.loadModel(ModelId("barrel"), "barrel/Barrel.obj", "barrel/Barrel.png")
+//        val entity = Entity(id = EntityId("barrel"), model = model, position = Vector3f(0f,0f, -2f))
+//
+//        scene.addEntity(entity)
+
+        val model = Model.loadModel(ModelId("box"), "box/box.obj", "box/box.png")
+        val entity = Entity(id = EntityId("box"), model = model, position = Vector3f(0f,0f, 0f))
 
         scene.addEntity(entity)
+
+        scene.lights = SceneLights(
+            AmbientLight(intensity = 0.0f),
+            DirLight(
+                color = Vector3f(1f),
+                direction = Vector3f(0f, 0f, 0f),
+                intensity = 1f
+            ),
+            emptyList(),
+            emptyList()
+        )
     }
 
     override fun input(delta: Long) {
@@ -120,11 +139,27 @@ class ThinMatrixGame: Engine() {
             camera.moveRight(move)
         }
 
-        if (window.isKeyPressed(GLFW_KEY_KP_8)) {
-            camera.moveUp(move)
+        if (window.isKeyPressed(GLFW_KEY_I)) {
+//            camera.moveUp(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increasePosition(0f, 0f, -0.02f)
         }
-        if (window.isKeyPressed(GLFW_KEY_KP_2)) {
-            camera.moveDown(move)
+        if (window.isKeyPressed(GLFW_KEY_K)) {
+//            camera.moveDown(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increasePosition(0f, 0f, 0.02f)
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_L)) {
+//            camera.moveDown(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increasePosition(0.02f, 0f, 0f)
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_J)) {
+//            camera.moveDown(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increasePosition(-0.02f, 0f, 0f)
         }
 
         if (window.isKeyPressed(GLFW_KEY_LEFT)) {
@@ -148,11 +183,11 @@ class ThinMatrixGame: Engine() {
     }
 
     override fun update(delta: Long) {
-        val entity = scene.modelEntitiesMap.values.first().first()
+//        val entity = scene.modelEntitiesMap.values.first().first()
 //        entity.increasePosition(0f, 0f, -0.02f)
-        val z = entity.position.z
+//        val z = entity.position.z
 //        entity.position = Vector3f(mouse.currentPosition.x, -mouse.currentPosition.y, z)
-        entity.increaseRotation(0f, 1f, 0f)
+//        entity.increaseRotation(0f, 1f, 0f)
 
 
     }

@@ -2,6 +2,9 @@ package com.example.my_engine.graphic.render
 
 import com.example.my_engine.graphic.*
 import com.example.my_engine.scene.Scene
+import com.example.my_engine.scene.lights.AmbientLight
+import org.joml.Vector3f
+import org.joml.Vector4f
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 
@@ -13,12 +16,39 @@ class SceneRenderer {
     private val uniformViewMatrix: Uniform
     private val uniformModelMatrix: Uniform
 
+    private val uniformMaterialAmbient: Uniform
+//    private val uniformMaterialDiffuse: Uniform
+    private val uniformMaterialSpecular: Uniform
+    private val uniformMaterialReflectance: Uniform
+    private val uniformAmbientFactor: Uniform
+    private val uniformAmbientColor: Uniform
+
+    private val uniformDirLightColor: Uniform
+    private val uniformDirLightDirection: Uniform
+    private val uniformDirLightIntencity: Uniform
+
+
     init {
         setUpShaderProgram()
 
         uniformProjectionMatrix = program.uniformLocationOf("projectionMatrix")
         uniformViewMatrix = program.uniformLocationOf("viewMatrix")
         uniformModelMatrix = program.uniformLocationOf("modelMatrix")
+
+        uniformMaterialAmbient = program.uniformLocationOf("material.ambient")
+//        uniformMaterialDiffuse = program.uniformLocationOf("material.diffuse")
+        uniformMaterialSpecular = program.uniformLocationOf("material.specular")
+        uniformMaterialReflectance = program.uniformLocationOf("material.reflectance")
+        uniformAmbientFactor = program.uniformLocationOf("ambientLight.factor")
+        uniformAmbientColor = program.uniformLocationOf("ambientLight.color")
+
+        // for pointLights
+        // for SpotLights
+
+        uniformDirLightColor = program.uniformLocationOf("dirLight.color")
+        uniformDirLightDirection = program.uniformLocationOf("dirLight.direction")
+        uniformDirLightIntencity = program.uniformLocationOf("dirLight.intensity")
+
     }
 
     private fun setUpShaderProgram() {
@@ -46,8 +76,15 @@ class SceneRenderer {
         program.setUniformData(uniformProjectionMatrix, scene.projection.projectionMatrix)
         program.setUniformData(uniformViewMatrix, scene.camera.viewMatrix)
 
+        updateLights(scene)
+
         scene.modelEntitiesMap.forEach { (model, entities) ->
             model.materials.forEach { material ->
+                program.setUniformData(uniformMaterialAmbient, material.ambient)
+//                program.setUniformData(uniformMaterialDiffuse, material.diffuse)
+                program.setUniformData(uniformMaterialSpecular, material.specular)
+                program.setUniformData(uniformMaterialReflectance, material.reflectance)
+
                 val texture = material.texture // scene.textureManager.textureMap[material.texturePath]!!
                 GL13.glActiveTexture(GL13.GL_TEXTURE0)
                 texture.bind()
@@ -64,6 +101,30 @@ class SceneRenderer {
         }
 
         program.unbind()
+    }
+
+    private fun updateLights(scene: Scene) {
+        val viewMatrix = scene.camera.viewMatrix
+
+        // TODO: check if null
+        scene.lights ?.let { sceneLights ->
+            val ambientLight = sceneLights.ambientLight
+            program.setUniformData(uniformAmbientFactor, ambientLight.intensity)
+            program.setUniformData(uniformAmbientColor, ambientLight.color)
+
+            val dirLight = sceneLights.dirLight
+            val auxDir = Vector4f(dirLight.direction, 0f)
+//            auxDir.mul(viewMatrix)
+            val dir = Vector3f(auxDir.x, auxDir.y, auxDir.z)
+            program.setUniformData(uniformDirLightColor, dirLight.color)
+            program.setUniformData(uniformDirLightDirection, dir)
+            program.setUniformData(uniformDirLightIntencity, dirLight.intensity)
+        }
+
+
+        // update point lights
+        // update spot lights
+
     }
 
 }
