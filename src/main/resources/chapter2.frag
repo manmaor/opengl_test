@@ -49,6 +49,8 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform DirLight dirLight;
 
+uniform mat4 viewMatrix;
+
 vec4 calcAmbient(AmbientLight ambientLight, vec4 ambient) {
     return vec4(ambientLight.factor * ambientLight.color, 1) * ambient;
 }
@@ -88,7 +90,7 @@ void main(void) {
 //
 //    vec4 diffuseSpecularColor = calcDirLight(diffuse, specular, dirLight, pass_position, pass_normal);
 
-    vec3 to_light_vector = (dirLight.direction - pass_position);
+    vec3 to_light_vector = ((viewMatrix * vec4(dirLight.direction, 1)).xyz - pass_position);
 
     vec3 unitNormal = pass_normal;
     vec3 unitLight = normalize(to_light_vector);
