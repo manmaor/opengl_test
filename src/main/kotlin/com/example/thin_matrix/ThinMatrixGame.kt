@@ -114,7 +114,7 @@ class ThinMatrixGame: Engine() {
             AmbientLight(intensity = 0.0f),
             DirLight(
                 color = Vector3f(1f),
-                direction = Vector3f(0f, 0f, 0f),
+                direction = Vector3f(0f, 4f, 0f),
                 intensity = 1f
             ),
             emptyList(),

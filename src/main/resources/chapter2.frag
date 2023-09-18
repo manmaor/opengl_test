@@ -90,7 +90,7 @@ void main(void) {
 //
 //    vec4 diffuseSpecularColor = calcDirLight(diffuse, specular, dirLight, pass_position, pass_normal);
 
-    vec3 to_light_vector = ((viewMatrix * vec4(dirLight.direction, 1)).xyz - pass_position);
+    vec3 to_light_vector = (dirLight.direction - pass_position);
 
     vec3 unitNormal = pass_normal;
     vec3 unitLight = normalize(to_light_vector);

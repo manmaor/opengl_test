@@ -113,8 +113,9 @@ class SceneRenderer {
             program.setUniformData(uniformAmbientColor, ambientLight.color)
 
             val dirLight = sceneLights.dirLight
-            val auxDir = Vector4f(dirLight.direction, 0f)
-//            auxDir.mul(viewMatrix)
+
+            val auxDir = Vector4f(dirLight.direction, 1f)
+            auxDir.mul(viewMatrix)
             val dir = Vector3f(auxDir.x, auxDir.y, auxDir.z)
             program.setUniformData(uniformDirLightColor, dirLight.color)
             program.setUniformData(uniformDirLightDirection, dir)
