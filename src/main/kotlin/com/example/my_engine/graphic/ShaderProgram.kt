@@ -78,7 +78,7 @@ class ShaderProgram(
                 MemoryStack.stackPush().use { stack ->
                     val buffer = stack.mallocFloat(4)
                     (value as Vector4f).toBuffer(buffer)
-                    GL20.glUniform3fv(uniform.location, buffer)
+                    GL20.glUniform4fv(uniform.location, buffer)
                 }
             }
 //            Matrix2f::class -> {

@@ -7,6 +7,7 @@ const float SPECULAR_POWER = 10;
 // These structs coresponds to the engine/scene/lights
 struct Material {
     vec4 ambient;
+    vec4 diffuse;
     vec4 specular;
     float reflectance;
 };
@@ -49,7 +50,6 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform DirLight dirLight;
 
-uniform mat4 viewMatrix;
 
 vec4 calcAmbient(AmbientLight ambientLight, vec4 ambient) {
     return vec4(ambientLight.factor * ambientLight.color, 1) * ambient;
@@ -59,7 +59,7 @@ vec4 calcLightColor(
     vec4 diffuse,
     vec4 specular,
     vec3 lightColor,
-    float light_intencity,
+    float light_intensity,
     vec3 position,
     vec3 to_light_dir,
     vec3 normal) {
@@ -69,38 +69,32 @@ vec4 calcLightColor(
 
     // Diffuse = (diffuseColor * lightColor * diffuseFactor * intencity)
     float diffuseFactor = max(dot(normal, to_light_dir), 0.0);
-    // diffuseColor = diffuse * vec4(lightColor, 1) * light_intencity * diffuseFactor;
-    diffuseColor = min(1.0, diffuseFactor) * vec4(1);
+     diffuseColor = diffuse * vec4(lightColor, 1) * light_intensity * diffuseFactor;
 
-    return (diffuseColor );
+    // Specular Light
+    vec3 camera_direction = normalize(-position);
+    vec3 from_light_dir = -to_light_dir;
+    vec3 reflected_light = normalize(reflect(from_light_dir, normal));
+    float specularFactor = max(dot(camera_direction, reflected_light), 0.0);
+    specularFactor = pow(specularFactor, SPECULAR_POWER);
+    specColor = specular * light_intensity * specularFactor * material.reflectance * vec4(lightColor, 1.0);
+
+    return (diffuseColor + specColor);
 }
 
 vec4 calcDirLight(vec4 diffuse, vec4 specular, DirLight light, vec3 position, vec3 normal) {
-//    vec3 lightDirection = (vec4(light.direction, 1) /* * viewMatrix*/).xyz;
-    vec3 light_direction = light.direction - position;
-    vec3 to_light_dir  = normalize(light_direction);
-    return calcLightColor(diffuse, specular, light.color, light.intensity, position, to_light_dir, normalize(normal));
+    vec3 to_light_vector = normalize(light.direction - position);
+    return calcLightColor(diffuse, specular, light.color, light.intensity, position, to_light_vector, normalize(normal));
 }
 
 void main(void) {
-//    vec4 texture_color = texture(textureSampler, pass_textureCoords);
-//    vec4 ambient = calcAmbient(ambientLight, texture_color + material.ambient);
-//    vec4 diffuse = texture_color; // + material.diffuse;
-//    vec4 specular = texture_color + material.specular;
-//
-//    vec4 diffuseSpecularColor = calcDirLight(diffuse, specular, dirLight, pass_position, pass_normal);
+    vec4 texture_color = texture(textureSampler, pass_textureCoords);
+    vec4 ambient = calcAmbient(ambientLight, texture_color * material.ambient); //
+    vec4 diffuse = texture_color + material.diffuse;
+    vec4 specular = material.specular;
 
-    vec3 to_light_vector = (dirLight.direction - pass_position);
+    vec4 diffuseSpecularColor = calcDirLight(diffuse, specular, dirLight, pass_position, pass_normal);
 
-    vec3 unitNormal = pass_normal;
-    vec3 unitLight = normalize(to_light_vector);
-
-    float nDotl = dot(unitNormal, unitLight);
-    float b = max(nDotl, 0.0);
-
-    vec3 d = vec3(b);
-    out_Color = vec4(d, 1);
-//    out_Color = diffuseSpecularColor;
-//    out_Color = ambient + diffuseSpecularColor;
+    out_Color = ambient + diffuseSpecularColor;
     // texture(textureSampler, pass_textureCoords); // vec4(colour, 1.0);
 }

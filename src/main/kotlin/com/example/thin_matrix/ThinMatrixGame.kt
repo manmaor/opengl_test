@@ -111,10 +111,10 @@ class ThinMatrixGame: Engine() {
         scene.addEntity(entity)
 
         scene.lights = SceneLights(
-            AmbientLight(intensity = 0.0f),
+            AmbientLight(intensity = 0.3f),
             DirLight(
                 color = Vector3f(1f),
-                direction = Vector3f(0f, 4f, 0f),
+                direction = Vector3f(0f, 100f, 100f),
                 intensity = 1f
             ),
             emptyList(),
@@ -139,6 +139,17 @@ class ThinMatrixGame: Engine() {
             camera.moveRight(move)
         }
 
+
+        if (window.isKeyPressed(GLFW_KEY_U)) {
+//            camera.moveUp(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increaseRotation(0f, 0.2f, 0f)
+        }
+        if (window.isKeyPressed(GLFW_KEY_O)) {
+//            camera.moveDown(move)
+            val entity = scene.modelEntitiesMap.values.first().first()
+            entity.increaseRotation(0f, -0.2f, 0f)
+        }
         if (window.isKeyPressed(GLFW_KEY_I)) {
 //            camera.moveUp(move)
             val entity = scene.modelEntitiesMap.values.first().first()

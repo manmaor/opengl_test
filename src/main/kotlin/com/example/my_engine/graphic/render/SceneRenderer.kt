@@ -17,7 +17,7 @@ class SceneRenderer {
     private val uniformModelMatrix: Uniform
 
     private val uniformMaterialAmbient: Uniform
-//    private val uniformMaterialDiffuse: Uniform
+    private val uniformMaterialDiffuse: Uniform
     private val uniformMaterialSpecular: Uniform
     private val uniformMaterialReflectance: Uniform
     private val uniformAmbientFactor: Uniform
@@ -36,7 +36,7 @@ class SceneRenderer {
         uniformModelMatrix = program.uniformLocationOf("modelMatrix")
 
         uniformMaterialAmbient = program.uniformLocationOf("material.ambient")
-//        uniformMaterialDiffuse = program.uniformLocationOf("material.diffuse")
+        uniformMaterialDiffuse = program.uniformLocationOf("material.diffuse")
         uniformMaterialSpecular = program.uniformLocationOf("material.specular")
         uniformMaterialReflectance = program.uniformLocationOf("material.reflectance")
         uniformAmbientFactor = program.uniformLocationOf("ambientLight.factor")
@@ -81,7 +81,7 @@ class SceneRenderer {
         scene.modelEntitiesMap.forEach { (model, entities) ->
             model.materials.forEach { material ->
                 program.setUniformData(uniformMaterialAmbient, material.ambient)
-//                program.setUniformData(uniformMaterialDiffuse, material.diffuse)
+                program.setUniformData(uniformMaterialDiffuse, material.diffuse)
                 program.setUniformData(uniformMaterialSpecular, material.specular)
                 program.setUniformData(uniformMaterialReflectance, material.reflectance)
 
@@ -116,6 +116,7 @@ class SceneRenderer {
 
             val auxDir = Vector4f(dirLight.direction, 1f)
             auxDir.mul(viewMatrix)
+
             val dir = Vector3f(auxDir.x, auxDir.y, auxDir.z)
             program.setUniformData(uniformDirLightColor, dirLight.color)
             program.setUniformData(uniformDirLightDirection, dir)

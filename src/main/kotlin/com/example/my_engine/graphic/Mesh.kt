@@ -109,7 +109,6 @@ class Mesh private constructor(
             val buffer = BufferUtils.createFloatBuffer(aiBuffer.remaining() * coordsSize)
             while (aiBuffer.remaining() > 0) {
                 val vec = aiBuffer.get()
-                println("${vec.x()}, ${vec.y()}, ${vec.z()}")
                 when (coordsSize) {
                     2 -> buffer.put(vec.x()).put(if (flipY) (1-vec.y()) else vec.y())
                     3 -> buffer.put(vec.x()).put(vec.y()).put(vec.z())
@@ -134,9 +133,7 @@ class Mesh private constructor(
             vao.bind()
 
             vbos.add(storeDataInAttributeList(0, 3, aiMesh.mVertices()))
-            println("normal")
             vbos.add(storeDataInAttributeList(1, 3, aiMesh.mNormals()!!))
-            println("end")
             vbos.add(storeDataInAttributeList(2, 2, aiMesh.mTextureCoords(0)!!, true))
             val aiFaces = aiMesh.mFaces()
             val vertexCount = aiFaces.remaining() * 3

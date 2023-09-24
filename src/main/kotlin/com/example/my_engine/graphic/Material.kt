@@ -4,16 +4,14 @@ import org.joml.Vector4f
 import org.lwjgl.assimp.AIColor4D
 import org.lwjgl.assimp.AIMaterial
 import org.lwjgl.assimp.Assimp
-import org.lwjgl.assimp.Assimp.AI_MATKEY_SHININESS_STRENGTH
-import org.lwjgl.assimp.Assimp.aiReturn_SUCCESS
-import org.lwjgl.assimp.Assimp.aiTextureType_NONE
 
 
 // When modifying also modify fragment shader structs
 class Material(
     val texture: Texture,
-    val ambient: Vector4f, // TODO: handle null
-    val specular: Vector4f, // TODO: handle null
+    val diffuse: Vector4f,
+    val ambient: Vector4f,
+    val specular: Vector4f,
     val reflectance: Float,
     val meshes: List<Mesh>
 ) {
@@ -25,21 +23,18 @@ class Material(
     companion object {
         fun from(aiMaterial: AIMaterial, materialPath: String, meshes: List<Mesh>): Material {
 
+            val diffuse = null // getColor(aiMaterial, Assimp.AI_MATKEY_COLOR_DIFFUSE)
             val ambient = getColor(aiMaterial, Assimp.AI_MATKEY_COLOR_AMBIENT)
             val specular = getColor(aiMaterial, Assimp.AI_MATKEY_COLOR_SPECULAR)
 
-            val reflectance = getReflectance(aiMaterial)
-
-//            val aiTexturePath = AIString.calloc()
-//            Assimp.aiGetMaterialTexture(aiMaterial, Assimp.aiTextureType_DIFFUSE, 0, aiTexturePath, null as IntBuffer?, null, null, null, null, null)
-//            val texturePath = aiTexturePath.dataString()
-//            aiTexturePath.free()
+            val reflectance = getReflectance(aiMaterial, Assimp.AI_MATKEY_SHININESS_STRENGTH)
 
             return Material(
                 Texture.loadTexture(materialPath),
+                diffuse ?: Vector4f(0f),
                 ambient ?: Vector4f(0f),
                 specular ?: Vector4f(0f),
-                reflectance,
+                1f,
                 meshes
             )
         }
@@ -57,19 +52,19 @@ class Material(
             return null
         }
 
-        private fun getReflectance(aiMaterial: AIMaterial): Float {
+        private fun getReflectance(aiMaterial: AIMaterial, pkey: String): Float {
             var reflectance = 0.0f
             val shininessFactor = floatArrayOf(0.0f)
             val pMax = intArrayOf(1)
             val result = Assimp.aiGetMaterialFloatArray(
                 aiMaterial,
-                AI_MATKEY_SHININESS_STRENGTH,
-                aiTextureType_NONE,
+                pkey,
+                Assimp.aiTextureType_NONE,
                 0,
                 shininessFactor,
                 pMax
             )
-            if (result !== aiReturn_SUCCESS) {
+            if (result != Assimp.aiReturn_SUCCESS) {
                 reflectance = shininessFactor[0]
             }
             return reflectance
